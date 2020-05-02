@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "717296052083",
+    "firebase_url": "https://finager-12715.firebaseio.com",
+    "project_id": "finager-12715",
+    "storage_bucket": "finager-12715.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717296052083:android:5912bb3b84e90bdd768706",
+        "android_client_info": {
+          "package_name": "com.example.finager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717296052083-vrgmrplv6ud1q7mr60tf4va5o5dnp152.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.finager",
+            "certificate_hash": "e7e9860c3a88dc5f237d6ae84b6749d40382449b"
+          }
+        },
+        {
+          "client_id": "717296052083-0fkki6g84jl9uq5lnp7hoksiia8cfi6s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoWmqSue7untnWh0ylfZGIVQ-2vo5CIKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717296052083-0fkki6g84jl9uq5lnp7hoksiia8cfi6s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
