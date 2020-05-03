@@ -51,11 +51,9 @@ public class Registration extends AppCompatActivity {
         firebaseUser = fAuth.getCurrentUser();
 
         if (firebaseUser != null) {
-            Intent intent = new Intent(Registration.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
+            sendUserToMainActivity();
         }
+
         setContentView(R.layout.activity_registration);
 
         mFullName = findViewById(R.id.fullNameET);
@@ -72,63 +70,10 @@ public class Registration extends AppCompatActivity {
             finish();
         }
 
-
         mRegistrerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
-                final String fullName = mFullName.getText().toString();
-
-                if (TextUtils.isEmpty(email)){ //provjera ako je korisnik ostavio prazan email
-                    mEmail.setError("Email is required.");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) {
-                    mPassword.setError("Password is required.");
-                    return;
-                }
-
-                if (password.length() < 6) { //provjera duljine passworda
-                    mPassword.setError("Password too short.");
-                }
-
-                progressBar.setVisibility(View.VISIBLE);
-
-                //registracija korisnika u firebase
-                fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressBar.setVisibility(View.GONE);
-                        if (task.isSuccessful()) { //ako je registracija uspjesno obavljena, korisnika se preusmjerava u MainActivity
-                            Toast.makeText(Registration.this, "User created.", Toast.LENGTH_SHORT).show();
-
-                            //spremanje korisnika u bazu podataka
-                            userID = fAuth.getCurrentUser().getUid(); //uzimam user ID
-                            DatabaseReference userRef = database.getReference("users").child(userID);
-                            User user = new User(fullName, email);
-                            userRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG, "onFailure: " + e.toString());
-                                }
-                            });
-
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            finish();
-                        } else {
-                            Toast.makeText(Registration.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                });
-
+                userRegistration();
             }
         });
 
@@ -143,6 +88,66 @@ public class Registration extends AppCompatActivity {
 
     }
 
+    public void userRegistration() {
+        final String email = mEmail.getText().toString().trim();
+        String password = mPassword.getText().toString().trim();
+        final String fullName = mFullName.getText().toString();
+
+        if (TextUtils.isEmpty(email)){ //provjera ako je korisnik ostavio prazan email
+            mEmail.setError("Email is required.");
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            mPassword.setError("Password is required.");
+            return;
+        }
+
+        if (password.length() < 6) { //provjera duljine passworda
+            mPassword.setError("Password too short.");
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        //registracija korisnika u firebase
+        fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                progressBar.setVisibility(View.GONE);
+                if (task.isSuccessful()) { //ako je registracija uspjesno obavljena, korisnika se preusmjerava u MainActivity
+                    Toast.makeText(Registration.this, "User created.", Toast.LENGTH_SHORT).show();
+
+                    //spremanje korisnika u bazu podataka
+                    userID = fAuth.getCurrentUser().getUid(); //uzimam user ID
+                    DatabaseReference userRef = database.getReference("users").child(userID);
+                    User user = new User(fullName, email);
+                    userRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "onFailure: " + e.toString());
+                        }
+                    });
+
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+                } else {
+                    Toast.makeText(Registration.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+    public void sendUserToMainActivity(){
+        Intent intent = new Intent(Registration.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
 
     @Override //ako korisnik pritisne u Constraint layout miče se tipkovnica iz fokusa
     public boolean dispatchTouchEvent(MotionEvent ev) {

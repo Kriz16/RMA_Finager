@@ -22,12 +22,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity {
-    EditText mEmail, mPassword;
-    Button mLoginBtn;
-    TextView mCreateBtn;
-    ProgressBar progressBar;
-    FirebaseAuth fAuth;
-    FirebaseUser firebaseUser;
+    private EditText mEmail, mPassword;
+    private Button mLoginBtn;
+    private TextView mCreateBtn;
+    private ProgressBar progressBar;
+    private FirebaseAuth fAuth;
+    private FirebaseUser firebaseUser;
+    private FirebaseAuth.AuthStateListener fAuthListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +38,20 @@ public class Login extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         firebaseUser = fAuth.getCurrentUser();
 
+        /*fAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseUser != null) {
+                    Intent intent = new Intent(Login.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        };*/
+
         if (firebaseUser != null) {
-            Intent intent = new Intent(Login.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
+            sendUserToMainActivity();
         }
 
         setContentView(R.layout.activity_login);
@@ -55,41 +66,7 @@ public class Login extends AppCompatActivity {
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
-
-                if (TextUtils.isEmpty(email)){ //provjera ako je korisnik ostavio prazan email
-                    mEmail.setError("Email is required.");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) {
-                    mPassword.setError("Password is required.");
-                    return;
-                }
-
-                if (password.length() < 6) { //provjera duljine passworda
-                    mPassword.setError("Password too short.");
-                }
-
-                progressBar.setVisibility(View.VISIBLE);
-
-                //authenticate the user
-                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressBar.setVisibility(View.GONE);
-                        if (task.isSuccessful()) {
-                            Toast.makeText(Login.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        } else {
-                            Toast.makeText(Login.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                });
-
+                signInUser();
             }
         });
 
@@ -101,9 +78,55 @@ public class Login extends AppCompatActivity {
             }
         });
 
+
     }
 
-    @Override
+    public void signInUser(){
+        String email = mEmail.getText().toString().trim();
+        String password = mPassword.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)){ //provjera ako je korisnik ostavio prazan email
+            mEmail.setError("Email is required.");
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            mPassword.setError("Password is required.");
+            return;
+        }
+
+        if (password.length() < 6) { //provjera duljine passworda
+            mPassword.setError("Password too short.");
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        //authenticate the user
+        fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                progressBar.setVisibility(View.GONE);
+                if (task.isSuccessful()) {
+                    Toast.makeText(Login.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                } else {
+                    Toast.makeText(Login.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    public void sendUserToMainActivity(){
+        Intent intent = new Intent(Login.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+
+    @Override //ako korisnik pritisne u Constraint layout miče se tipkovnica iz fokusa
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (getCurrentFocus() != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Login.INPUT_METHOD_SERVICE);
@@ -112,4 +135,10 @@ public class Login extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
 
+
+    /*@Override
+        protected void onStart(){
+            super.onStart();
+            fAuth.addAuthStateListener(fAuthListener);
+    }*/
 }

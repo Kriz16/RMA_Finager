@@ -7,19 +7,19 @@
     tools:context=".Login"
     android:background="@drawable/blue_background">
 
-    <TextView
-        android:id="@+id/appNameET"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/aclonica"
-        android:text="FinaGer"
-        android:textColor="#050505"
-        android:textSize="30sp"
+
+    <ImageView
+        android:id="@+id/app_logo"
+        android:layout_width="125sp"
+        android:layout_height="125sp"
+        android:cropToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19999999" />
+        app:layout_constraintVertical_bias="0.20"
+        app:srcCompat="@drawable/logo_finager" />
+
 
     <TextView
         android:id="@+id/textCreateNewAcc"
@@ -31,7 +31,7 @@
         android:textColor="#00BCD4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appNameET" />
+        app:layout_constraintTop_toBottomOf="@+id/app_logo" />
 
 
     <EditText
@@ -108,5 +108,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createTextTV" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
