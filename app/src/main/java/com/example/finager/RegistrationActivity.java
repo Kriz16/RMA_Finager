@@ -20,19 +20,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
-public class Registration extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     EditText mFullName, mEmail, mPassword;
     Button mRegistrerBtn;
@@ -80,8 +74,7 @@ public class Registration extends AppCompatActivity {
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Login.class));
-                finish();
+                sendUserToLoginActivity();
             }
         });
 
@@ -115,7 +108,7 @@ public class Registration extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) { //ako je registracija uspjesno obavljena, korisnika se preusmjerava u MainActivity
-                    Toast.makeText(Registration.this, "User created.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistrationActivity.this, "User created.", Toast.LENGTH_SHORT).show();
 
                     //spremanje korisnika u bazu podataka
                     userID = fAuth.getCurrentUser().getUid(); //uzimam user ID
@@ -136,23 +129,28 @@ public class Registration extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
                 } else {
-                    Toast.makeText(Registration.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistrationActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }
         });
     }
     public void sendUserToMainActivity(){
-        Intent intent = new Intent(Registration.this, MainActivity.class);
+        Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        finish();
+    }
+
+    public void sendUserToLoginActivity(){
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
     }
 
     @Override //ako korisnik pritisne u Constraint layout miče se tipkovnica iz fokusa
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (getCurrentFocus() != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Registration.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(RegistrationActivity.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
         return super.dispatchTouchEvent(ev);

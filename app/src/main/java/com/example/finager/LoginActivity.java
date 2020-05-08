@@ -21,7 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private EditText mEmail, mPassword;
     private Button mLoginBtn;
     private TextView mCreateBtn;
@@ -37,18 +37,6 @@ public class Login extends AppCompatActivity {
 
         fAuth = FirebaseAuth.getInstance();
         firebaseUser = fAuth.getCurrentUser();
-
-        /*fAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseUser != null) {
-                    Intent intent = new Intent(Login.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        };*/
 
         if (firebaseUser != null) {
             sendUserToMainActivity();
@@ -73,11 +61,9 @@ public class Login extends AppCompatActivity {
         mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Registration.class));
-                finish();
+                sendUserToRegistrationActivity();
             }
         });
-
 
     }
 
@@ -107,19 +93,24 @@ public class Login extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
-                    Toast.makeText(Login.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
                     finish();
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 } else {
-                    Toast.makeText(Login.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }
         });
     }
 
+    public void sendUserToRegistrationActivity() {
+        startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
+        finish();
+    }
+
     public void sendUserToMainActivity(){
-        Intent intent = new Intent(Login.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
@@ -129,7 +120,7 @@ public class Login extends AppCompatActivity {
     @Override //ako korisnik pritisne u Constraint layout miče se tipkovnica iz fokusa
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (getCurrentFocus() != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Login.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(LoginActivity.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
         return super.dispatchTouchEvent(ev);

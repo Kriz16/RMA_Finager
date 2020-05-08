@@ -13,12 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Registration"
-            android:screenOrientation="nosensor">
+        <activity android:name=".RegistrationActivity"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         </activity>
-        <activity android:name=".Login"
-            android:screenOrientation="nosensor">
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +29,8 @@
         </activity>
 
          <activity android:name=".MainActivity"
-            android:screenOrientation="nosensor"/>
+            android:screenOrientation="nosensor"
+             android:theme="@style/AppTheme.NoActionBar"/>
 
         <meta-data
             android:name="preloaded_fonts"

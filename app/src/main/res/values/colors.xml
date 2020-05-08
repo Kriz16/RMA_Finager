@@ -3,4 +3,10 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000</color>
+    <color name="blue">#3399FF</color>
+    <color name="fab_label_background">#072030</color>
+    <color name="green_income">#36E60F</color>
+    <color name="red_expense">#F42B03</color>
 </resources>
