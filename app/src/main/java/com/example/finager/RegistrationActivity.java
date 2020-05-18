@@ -27,15 +27,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationActivity extends AppCompatActivity {
-    public static final String TAG = "TAG";
-    EditText mFullName, mEmail, mPassword;
-    Button mRegistrerBtn;
-    TextView mLoginBtn;
-    FirebaseAuth fAuth;
-    ProgressBar progressBar;
-    FirebaseDatabase database;
-    String userID;
-    FirebaseUser firebaseUser;
+    private static final String TAG = "TAG";
+    private EditText mFullName, mEmail, mPassword;
+    private Button mRegistrerBtn;
+    private TextView mLoginBtn;
+    private FirebaseAuth fAuth;
+    private ProgressBar progressBar;
+    private FirebaseDatabase database;
+    private String userID;
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

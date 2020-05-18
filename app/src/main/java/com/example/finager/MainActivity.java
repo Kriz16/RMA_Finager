@@ -11,8 +11,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
@@ -79,7 +79,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //showToast("add income clicked");
-                openDialog(0, userID);
+                //openDialog(0, userID);
+                Intent intent = new Intent(MainActivity.this, AddBillActivity.class);
+                Bundle bundle = new Bundle(); //slanje podataka iz aktivnosti u aktivnost preko Bundlea tj. dal je pritisnut expense ili income
+                bundle.putInt("expense_or_income", 0);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 addBillFAB.collapse();
             }
         });
@@ -89,11 +94,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //showToast("add expense clicked");
-                openDialog(1, userID);
+                //openDialog(1, userID);
+                Intent intent = new Intent(MainActivity.this, AddBillActivity.class);
+                Bundle bundle = new Bundle(); //slanje podataka iz aktivnosti u aktivnost preko Bundlea tj. dal je pritisnut expense ili income
+                bundle.putInt("expense_or_income", 1);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 addBillFAB.collapse();
             }
         });
-
 
 
 
@@ -106,10 +115,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(requestActivity);
                         break;
 
-                    case R.id.myFinance:
-                        Intent myFinance = new Intent(MainActivity.this, MainActivity.class);
-                        startActivity(myFinance);
-                        break;
+
 
                     case R.id.myGroups:
                         Intent myGroups = new Intent(MainActivity.this, GroupFinanceActivity.class);
@@ -120,6 +126,10 @@ public class MainActivity extends AppCompatActivity {
                         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivity(settingsIntent);
                         break;*/
+                    case R.id.myFinance:
+                        Intent myFinance = new Intent(MainActivity.this, MyCategoriesActivity.class);
+                        startActivity(myFinance);
+                        break;
 
                     case R.id.logout:
                         firebaseAuth.getInstance().signOut();
@@ -137,10 +147,10 @@ public class MainActivity extends AppCompatActivity {
                 .build();*/
     }
 
-    public void openDialog(int expense_or_income, String UserID) {
+    /*public void openDialog(int expense_or_income, String UserID) {
         AddBillDialog addBillDialog = new AddBillDialog(expense_or_income, UserID);
         addBillDialog.show(getSupportFragmentManager(), "add bill dialog");
-    }
+    }*/
 
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -184,5 +194,14 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override //ako korisnik pritisne u Constraint layout miče se tipkovnica iz fokusa
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

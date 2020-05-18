@@ -70,4 +70,10 @@ public class Bill {
         this.userID = userID;
     }
 
+    @Override
+    public String toString() {
+        return "Bill{" +
+                "amount=" + amount +
+                '}';
+    }
 }

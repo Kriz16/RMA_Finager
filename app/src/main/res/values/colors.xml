@@ -9,4 +9,5 @@
     <color name="fab_label_background">#072030</color>
     <color name="green_income">#36E60F</color>
     <color name="red_expense">#F42B03</color>
+    <color name="light_blue">#66CCFF</color>
 </resources>
