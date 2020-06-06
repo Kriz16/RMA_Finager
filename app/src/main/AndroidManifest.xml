@@ -12,12 +12,71 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MyCategoryBillsActivity"></activity>
-        <activity android:name=".MyCategoriesActivity" />
+        <activity android:name=".EditGroupActivity"
+            android:label="Edit group"
+            android:screenOrientation="nosensor"></activity>
+        <activity android:name=".MyRequestsActivity"
+            android:label="Requests"
+            android:screenOrientation="nosensor"/>
+        <activity
+            android:name=".EditGroupBillActivity"
+            android:label="Edit bill"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".GroupCategoryBillsActivity"
+            android:label="Category bills"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".EditGroupCategoryActivity"
+            android:label="Edit category"
+            android:parentActivityName=".GroupCategoriesActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".GroupCategoriesActivity"
+            android:label="Group categories"
+            android:parentActivityName=".GroupActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".GroupActivity"
+            android:label="Group"
+            android:parentActivityName=".MyGroupsActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".MyGroupsActivity"
+            android:label="My groups"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".AddGroupActivity"
+            android:label="Add new group"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".EditMyCategoryActivity"
+            android:label="Edit category"
+            android:parentActivityName=".MyCategoriesActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".EditMyBillActivity"
+            android:label="Edit bill"
+            android:parentActivityName=".MyCategoryBillsActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".MyCategoryBillsActivity"
+            android:label="Category bills"
+            android:parentActivityName=".MyCategoriesActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".MyCategoriesActivity"
+            android:label="My categories"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".AddBillActivity"
+            android:label="Add new bill"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="nosensor"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".RegistrationActivity"
             android:screenOrientation="nosensor"
@@ -34,6 +93,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
+            android:label="My finances"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar" />
 

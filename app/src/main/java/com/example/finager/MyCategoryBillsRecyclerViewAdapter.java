@@ -1,15 +1,11 @@
 package com.example.finager;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,27 +16,55 @@ public class MyCategoryBillsRecyclerViewAdapter  extends RecyclerView.Adapter<My
 
     private Context context;
     private ArrayList<Bill> bills;
+    private OnItemClickListener mListener;
+    private int inc_or_exp;
 
-    public MyCategoryBillsRecyclerViewAdapter(Context c, ArrayList<Bill> b) {
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+        void onEditClick(int position);
+        void onDeleteClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
+    public MyCategoryBillsRecyclerViewAdapter(Context c, ArrayList<Bill> b, int expense_or_income) {
         context = c;
         bills = b;
+        inc_or_exp = expense_or_income;
     }
 
     @NonNull
     @Override
     public MyCategoryBillsRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyCategoryBillsRecyclerViewAdapter.MyViewHolder(LayoutInflater.from(context).inflate(R.layout.card_view_my_category_bills, parent, false));
+        View v;
+        if (inc_or_exp == 1) {
+            v = LayoutInflater.from(context).inflate(R.layout.card_view_my_category_bills_expense, parent, false);
+        } else {
+            v = LayoutInflater.from(context).inflate(R.layout.card_view_my_category_bills_income, parent, false);
+        }
+
+        MyCategoryBillsRecyclerViewAdapter.MyViewHolder viewHolder = new MyCategoryBillsRecyclerViewAdapter.MyViewHolder(v, mListener);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyCategoryBillsRecyclerViewAdapter.MyViewHolder holder, int position) {
-        holder.billSubcategory.setText(bills.get(position).getCategory());
-        holder.billAmount.setText(String.valueOf(bills.get(position).getAmount()));
-        holder.billDate.setText(bills.get(position).getDate());
+        Bill currentBill = bills.get(position);
+        holder.billSubcategory.setText(currentBill.getSubcategory());
+
+        if (currentBill.getExpense_or_income() == 1) {
+            holder.billAmount.setText("-" + String.valueOf(currentBill.getAmount()));
+        } else {
+            holder.billAmount.setText(String.valueOf(currentBill.getAmount()));
+        }
+
+        holder.billDate.setText(currentBill.getDate());
         holder.editBill.setVisibility(View.VISIBLE);
-        holder.onEditClick(position);
+        //holder.onEditClick(position);
         holder.deleteBill.setVisibility(View.VISIBLE);
-        holder.onDeleteClick(position);
+        //holder.onDeleteClick(position);
     }
 
     @Override
@@ -52,29 +76,51 @@ public class MyCategoryBillsRecyclerViewAdapter  extends RecyclerView.Adapter<My
         TextView billSubcategory, billAmount,  billDate;
         Button editBill, deleteBill;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) { //konstruktor
             super(itemView);
             billAmount = (TextView) itemView.findViewById(R.id.amountCatBillTV);
             billSubcategory = (TextView) itemView.findViewById(R.id.subcategoryCatBillTV);
             billDate = (TextView) itemView.findViewById(R.id.dateCatBillTV);
             editBill = (Button) itemView.findViewById(R.id.editCatBillsBTN);
             deleteBill = (Button) itemView.findViewById(R.id.deleteCatBillsBTN);
-        }
-        public void onEditClick(final int position) {
+
             editBill.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*Intent intent = new Intent(context , MyCategoryBillsActivity.class);
-                    //Bundle bundle = new Bundle(); //slanje podataka iz aktivnosti u aktivnost preko Bundlea tj. dal je pritisnut expense ili income
-                    //bundle.putString();
-                    intent.putExtra("category", bills.get(position).getCategory());
-                    context.startActivity(intent);*/
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onEditClick(position);
+                        }
+                    }
+                }
+            });
+
+            deleteBill.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onDeleteClick(position);
+                        }
+                    }
+                }
+            });
+
+
+        }
+        /*public void onEditClick(final int position) {
+            editBill.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
                     Toast.makeText(context, position+" is clicked", Toast.LENGTH_SHORT).show();
                 }
             });
-        }
+        }*/
 
-        public void onDeleteClick(final int position) {
+        /*public void onDeleteClick(final int position) {
             deleteBill.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -101,15 +147,7 @@ public class MyCategoryBillsRecyclerViewAdapter  extends RecyclerView.Adapter<My
                     //Toast.makeText(context, position+" is clicked", Toast.LENGTH_SHORT).show();
                 }
             });
-        }
-    }
-
-    private void deleteBillFromDatabase() {
-
-    }
-
-    private void updateCategoryTotalAmountAndDate() {
-
+        }*/
     }
 
 }

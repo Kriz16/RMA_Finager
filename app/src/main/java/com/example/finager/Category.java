@@ -3,17 +3,17 @@ package com.example.finager;
 public class Category {
     private String userID;
     private String category;
-    private String date;
+    //private String date;
     private int expense_or_income;
     private float total_amount;
 
     public Category() {
     }
 
-    public Category(String userID, String category, String date, int expense_or_income, float total_amount) {
+    public Category(String userID, String category, int expense_or_income, float total_amount) {
         this.userID = userID;
         this.category = category;
-        this.date = date;
+        //this.date = date;
         this.expense_or_income = expense_or_income;
         this.total_amount = total_amount;
     }
@@ -34,13 +34,13 @@ public class Category {
         this.category = category;
     }
 
-    public String getDate() {
+    /*public String getDate() {
         return date;
     }
 
     public void setDate(String date) {
         this.date = date;
-    }
+    }*/
 
     public int getExpense_or_income() {
         return expense_or_income;
